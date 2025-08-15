@@ -2,9 +2,9 @@ name: CI with Allure Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]   # Changed from main → master
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -33,16 +33,13 @@ jobs:
         if: always()
         run: allure generate target/allure-results --clean -o target/allure-report
 
-      - name: Upload Allure results (artifact)
+      - name: Save Allure report to docs folder
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: target/allure-results
-
-      - name: Publish Allure to GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/allure-report
+        run: |
+          rm -rf docs
+          mkdir docs
+          cp -r target/allure-report/* docs/
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git commit -m "Upd
