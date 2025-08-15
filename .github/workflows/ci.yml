@@ -2,7 +2,7 @@ name: CI with Allure Pages
 
 on:
   push:
-    branches: [ "master" ]   # Changed from main → master
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
@@ -10,6 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed for pushing to the repo
     steps:
       - uses: actions/checkout@v4
 
@@ -21,16 +23,13 @@ jobs:
           cache: 'maven'
 
       - name: Run tests (headless Chrome, QA)
-        run: mvn -B -ntp clean test -Pqa -Dbrowser=chrome -Dheadless=true -Dcucumber.filter.tags='not @wip'
+        run: mvn -B -ntp clean test -Pqa -Dbrowser=chrome -Dheadless=true -Dcucumber.filter.tags="not @wip"
 
       - name: Install Allure CLI
         run: |
+          sudo apt-add-repository ppa:qameta/allure -y
           sudo apt-get update
-          sudo apt-get install -y wget unzip
-          wget https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-2.25.0.zip
-          unzip allure-2.25.0.zip -d /opt/
-          sudo ln -s /opt/allure-2.25.0/bin/allure /usr/bin/allure
-
+          sudo apt-get install allure -y
 
       - name: Generate Allure Report
         if: always()
@@ -42,7 +41,4 @@ jobs:
           rm -rf docs
           mkdir docs
           cp -r target/allure-report/* docs/
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs
-          git commit -m "Update Allure report"
+          git config --
