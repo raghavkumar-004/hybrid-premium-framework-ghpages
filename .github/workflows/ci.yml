@@ -26,13 +26,10 @@ jobs:
       - name: Run tests (headless Chrome, QA)
         run: mvn -B -ntp clean test -Pqa -Dbrowser=chrome -Dheadless=true -Dcucumber.filter.tags='not @wip'
 
-      - name: Install Allure CLI
-        run: |
+       name: Install Allure CLI
+         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip
-          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.29.0.zip
-          unzip allure-2.29.0.zip -d /opt/
-          sudo ln -s /opt/allure-2.29.0/bin/allure /usr/local/bin/allure
+          sudo apt-get install -y allure
           allure --version
 
       - name: Generate Allure Report
