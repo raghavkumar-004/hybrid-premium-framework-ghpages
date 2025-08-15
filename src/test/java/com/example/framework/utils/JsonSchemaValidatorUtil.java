@@ -11,8 +11,9 @@ public class JsonSchemaValidatorUtil {
         if (is == null) throw new RuntimeException("Schema not found: " + classpathSchema);
         String schema;
         try (Scanner sc = new Scanner(is, StandardCharsets.UTF_8)) {
-            schema = sc.useDelimiter("\A").next();
+            schema = sc.useDelimiter("\\A").next();
         }
         return JsonSchemaValidator.matchesJsonSchema(schema);
     }
+
 }
