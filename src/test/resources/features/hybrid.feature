@@ -11,4 +11,3 @@ Feature: Hybrid API + UI and API schema validation
     Given I call the user API for id 2
     Then the response matches the user schema
     And the first name from test data "sampleUser.firstName" equals the API first name
-    
