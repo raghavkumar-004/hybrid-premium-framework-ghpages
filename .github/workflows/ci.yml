@@ -25,13 +25,11 @@ jobs:
 
       - name: Run tests (headless Chrome, QA)
         run: mvn -B -ntp clean test -Pqa -Dbrowser=chrome -Dheadless=true -Dcucumber.filter.tags='not @wip'
-
       - name: Install Allure
         run: |
-          wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-commandline-2.30.0.zip
-          unzip allure-commandline-2.30.0.zip -d /opt/allure
-          sudo ln -s /opt/allure/allure-2.30.0/bin/allure /usr/bin/allure
-
+          wget https://github.com/allure-framework/allure2/releases/download/2.34.1/allure-2.34.1.zip
+          unzip allure-2.34.1.zip -d /opt/allure
+          sudo ln -s /opt/allure/allure-2.34.1/bin/allure /usr/bin/allure
 
       - name: Generate Allure Report
         run: allure generate target/allure-results --clean -o target/allure-report
